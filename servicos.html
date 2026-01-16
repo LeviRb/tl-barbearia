@@ -8,196 +8,38 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* --- CSS GLOBAL --- */
-        body {
-            background-color: #0f0f0f;
-            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Roboto Slab', serif;
-            margin: 0;
-        }
-
-        .navbar-custom {
-            background-color: rgba(15, 15, 15, 0.95);
-            border-bottom: 2px solid #FFD700;
-            padding: 15px 0;
-            font-family: 'Rye', serif;
-        }
+        /* CSS PADRÃO */
+        body { background-color: #0f0f0f; background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px); color: white; min-height: 100vh; display: flex; flex-direction: column; font-family: 'Roboto Slab', serif; margin: 0; }
+        .navbar-custom { background-color: rgba(15, 15, 15, 0.95); border-bottom: 2px solid #FFD700; padding: 15px 0; font-family: 'Rye', serif; }
         .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; text-shadow: 1px 1px 2px black; }
         .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
         .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
-
         .flex-grow-content { flex: 1; width: 100%; }
         .main-title { font-family: 'Rye', serif; color: #FFD700; font-size: 3.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         .sub-title { font-size: 1.1rem; color: #e0e0e0; margin-bottom: 40px; }
         
-        /* CARD ESTILO RETRATO */
-        .flip-container {
-            perspective: 1000px;
-            height: 350px; 
-            cursor: pointer;
-        }
-
-        .flip-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-
-        .flip-container.flipped .flip-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-front, .flip-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-            overflow: hidden;
-        }
-
-        .flip-front {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            padding: 20px;
-        }
-        
+        .flip-container { perspective: 1000px; height: 350px; cursor: pointer; }
+        .flip-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-container.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 16px rgba(0,0,0,0.5); overflow: hidden; }
+        .flip-front { background: linear-gradient(145deg, #1a1a1a, #0f0f0f); padding: 20px; }
         .flip-container:hover .flip-front { border-color: #FFD700; }
-
-        .service-name-front { 
-            font-family: 'Rye', serif; 
-            color: #FFD700; 
-            font-size: 1.8rem; 
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 0px #000;
-        }
+        .service-name-front { font-family: 'Rye', serif; color: #FFD700; font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 0px #000; }
+        .service-price { font-family: 'Roboto Slab', serif; font-size: 2rem; font-weight: bold; color: white; font-style: italic; }
+        .btn-agendar-card { background-color: transparent; border: 2px solid #FFD700; color: #FFD700; font-family: 'Rye', serif; margin-top: 15px; padding: 5px 20px; border-radius: 20px; transition: 0.3s; z-index: 10; }
+        .btn-agendar-card:hover { background-color: #FFD700; color: black; }
+        .flip-back { background-color: #000; transform: rotateY(180deg); border: 2px solid #FFD700; padding: 0; }
+        .flip-back img { width: 100%; height: 100%; object-fit: cover; opacity: 1; }
+        .flip-back .overlay-text { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 10px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0)); font-family: 'Rye', serif; color: #FFD700; font-size: 1.3rem; text-align: center; }
         
-        .service-price { 
-            font-family: 'Roboto Slab', serif; 
-            font-size: 2rem; 
-            font-weight: bold;
-            color: white;
-            font-style: italic;
-        }
-
-        .btn-agendar-card {
-            background-color: transparent;
-            border: 2px solid #FFD700;
-            color: #FFD700;
-            font-family: 'Rye', serif;
-            margin-top: 15px;
-            padding: 5px 20px;
-            border-radius: 20px;
-            transition: 0.3s;
-            z-index: 10;
-        }
-        .btn-agendar-card:hover {
-            background-color: #FFD700;
-            color: black;
-        }
-
-        .flip-back {
-            background-color: #000;
-            transform: rotateY(180deg);
-            border: 2px solid #FFD700;
-            padding: 0;
-        }
-
-        .flip-back img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 1;
-        }
-
-        .flip-back .overlay-text {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 10px;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0));
-            font-family: 'Rye', serif;
-            color: #FFD700;
-            font-size: 1.3rem;
-            text-shadow: 1px 1px 2px black;
-            text-align: center;
-        }
-
-        .footer {
-            background-color: rgba(15, 15, 15, 0.95);
-            border-top: 2px solid #FFD700;
-            padding: 20px 0;
-            margin-top: auto;
-            width: 100%;
-        }
+        .footer { background-color: rgba(15, 15, 15, 0.95); border-top: 2px solid #FFD700; padding: 20px 0; margin-top: auto; width: 100%; }
         .footer-item { display: flex; align-items: center; justify-content: center; gap: 10px; color: #fff; font-style: italic; font-size: 14px; }
         .footer-item i { color: #FFD700; font-size: 18px; }
-        .footer a { color: #fff; text-decoration: none; }
-        .footer a:hover { color: #FFD700; }
-        
-        @media (max-width: 768px) {
-            .footer-item { justify-content: flex-start; margin-bottom: 10px; }
-            .col-md-3 { margin-bottom: 15px; }
-            .main-title { font-size: 2.5rem; }
-            .flip-container { height: 300px; }
-        }
-
-        /* --- ESTILOS DO NOVO MODAL --- */
-        .modal-content {
-            background-color: #1a1a1a;
-            border: 2px solid #FFD700;
-            color: white;
-            border-radius: 15px;
-        }
-        .modal-header { border-bottom: 1px solid #444; }
-        .modal-footer { border-top: 1px solid #444; }
-        .form-control, .form-select {
-            background-color: #0f0f0f;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 8px;
-        }
-        .form-control:focus, .form-select:focus {
-            background-color: #0f0f0f;
-            color: white;
-            border-color: #FFD700;
-            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-        }
-        
-        /* Lista de Checkbox de Serviços */
-        .servicos-list-container {
-            max-height: 150px;
-            overflow-y: auto;
-            background: #0f0f0f;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #444;
-        }
-        .form-check-input:checked {
-            background-color: #FFD700;
-            border-color: #FFD700;
-        }
-        
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 4px; }
+        @media (max-width: 768px) { .footer-item { justify-content: flex-start; margin-bottom: 10px; } .col-md-3 { margin-bottom: 15px; } .main-title { font-size: 2.5rem; } .flip-container { height: 300px; } }
     </style>
 </head>
 <body>
@@ -205,17 +47,15 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="index.html">T & L | BarberShop</a>
-            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
                     <li class="nav-item"><a class="nav-link" href="horarios.html">Horários</a></li>
-                    <li class="nav-item"><a class="nav-link" href="agendamento.html">Agendamento</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="agendamento.html">Agendamento</a></li>
                     <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="nossotime.html">Nosso Time</a></li>
+                    <li class="nav-item"><a class="nav-link" href="nossoTime.html">Nosso time</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
                 </ul>
             </div>
@@ -225,66 +65,11 @@
     <div class="container py-5 flex-grow-content">
         <div class="text-center mb-4">
             <h1 class="main-title"><i class="fas fa-barcode"></i> Serviços</h1>
-            <p class="sub-title">Clique no botão para agendar um ou mais serviços</p>
+            <p class="sub-title">Confira nossos cortes e preços atualizados</p>
         </div>
 
         <div id="lista-servicos" class="row g-4 justify-content-center">
-            </div>
-    </div>
-
-    <div class="modal fade" id="modalAgendamento" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" style="font-family: 'Rye', serif; color: #FFD700;">Agendar Serviço</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formAgendar">
-                        
-                        <div class="mb-3">
-                            <label class="form-label text-warning fw-bold">Selecione os Serviços:</label>
-                            <div class="servicos-list-container" id="containerCheckboxes">
-                                </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Seu Nome Completo</label>
-                            <input type="text" class="form-control" id="modalNome" required placeholder="Digite seu nome" maxlength="50">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label">CPF (Obrigatório)</label>
-                                <input type="text" class="form-control" id="modalCPF" required placeholder="000.000.000-00" maxlength="14">
-                                <div id="feedbackCPF" class="invalid-feedback" style="display: none;">CPF Inválido!</div>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label">WhatsApp (Válido)</label>
-                                <input type="tel" class="form-control" id="modalWpp" required placeholder="(11) 90000-0000" maxlength="15">
-                                <div id="feedbackWpp" class="invalid-feedback" style="display: none;">Número incompleto!</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label">Data</label>
-                                <input type="date" class="form-control" id="modalData" required>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label">Horário Disponível</label>
-                                <select class="form-select" id="modalHora" required>
-                                    <option value="" selected disabled>Selecione...</option>
-                                    </select>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-warning w-100 fw-bold py-2 mt-2">
-                            <i class="fab fa-whatsapp"></i> Confirmar e Enviar
-                        </button>
-                    </form>
-                </div>
-            </div>
+            <p class="text-center text-white">Carregando serviços do sistema...</p>
         </div>
     </div>
 
@@ -293,8 +78,6 @@
             <div class="row text-center text-md-start">
                 <div class="col-md-3 col-sm-6"><div class="footer-item"><i class="fab fa-instagram"></i><a href="#">@tlbarbershop</a></div></div>
                 <div class="col-md-3 col-sm-6"><div class="footer-item"><i class="fas fa-phone-alt"></i><span>(11) 91234-5678</span></div></div>
-                <div class="col-md-3 col-sm-6"><div class="footer-item"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></div></div>
-                <div class="col-md-3 col-sm-6"><div class="footer-item"><i class="fas fa-map-marker-alt"></i><span>Rua Exemplo, 123</span></div></div>
             </div>
         </div>
     </footer>
@@ -302,216 +85,63 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // CONFIGURAÇÃO: NÚMERO DO BARBEIRO (Coloque o número real aqui)
-        const NUMERO_BARBEIRO = "5585982083975"; 
-
-        // 1. CARREGAR SERVIÇOS NOS CARDS
-        function virarCard(elemento) {
-            elemento.classList.toggle('flipped');
-        }
-
-        const servicosSalvos = JSON.parse(localStorage.getItem('meusServicos')) || [];
-        const container = document.getElementById('lista-servicos');
-
-        if(servicosSalvos.length === 0) {
-             container.innerHTML = '<p class="text-center text-white">Nenhum serviço cadastrado.</p>';
-        }
-
-        servicosSalvos.forEach((servico, index) => {
-            const coluna = document.createElement('div');
-            coluna.className = 'col-md-4 col-sm-6';
-
-            const imagemServico = servico.imagem ? servico.imagem : 'serv01.png';
-
-            coluna.innerHTML = `
-                <div class="flip-container" onclick="virarCard(this)">
-                    <div class="flip-inner">
-                        <div class="flip-front">
-                            <h3 class="service-name-front">${servico.nome}</h3>
-                            <h2 class="service-price">R$ ${parseFloat(servico.preco).toFixed(2).replace('.', ',')}</h2>
-                            
-                            <button class="btn-agendar-card" onclick="abrirModal(event, '${servico.nome}')">
-                                AGENDAR <i class="far fa-calendar-check"></i>
-                            </button>
-                            
-                            <small class="text-white mt-3" style="font-size: 0.8rem; opacity: 0.6;">(Clique na borda para virar)</small>
-                        </div>
-                        <div class="flip-back">
-                            <img src="${imagemServico}" alt="${servico.nome}" onerror="this.style.display='none';">
-                            <div class="overlay-text">${servico.nome}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.appendChild(coluna);
-        });
-
-        // 2. PREENCHER SELECT DE HORÁRIOS
-        const selectHora = document.getElementById('modalHora');
-        const horariosDisponiveis = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+        const SUPABASE_URL = 'https://judqyacdukuxwobxxyjg.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1ZHF5YWNkdWt1eHdvYnh4eWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTI2ODEsImV4cCI6MjA4MzQ4ODY4MX0.7jc4l2GGq2SiFnLAXYd_FfmLmpoP6RFsNo_K5iKg_II';
         
-        horariosDisponiveis.forEach(hora => {
-            const option = document.createElement('option');
-            option.value = hora;
-            option.textContent = hora;
-            selectHora.appendChild(option);
-        });
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 3. FUNÇÃO ABRIR MODAL
-        function abrirModal(event, nomeServicoPreSelecionado) {
-            event.stopPropagation();
-            
-            const containerCheck = document.getElementById('containerCheckboxes');
-            containerCheck.innerHTML = ''; 
+        function virarCard(elemento) { elemento.classList.toggle('flipped'); }
 
-            servicosSalvos.forEach(serv => {
-                const div = document.createElement('div');
-                div.className = 'form-check';
-                const checked = (serv.nome === nomeServicoPreSelecionado) ? 'checked' : '';
-                
-                div.innerHTML = `
-                    <input class="form-check-input servico-checkbox" type="checkbox" value="${serv.nome}" id="check_${serv.nome}" ${checked}>
-                    <label class="form-check-label text-white" for="check_${serv.nome}">
-                        ${serv.nome} (R$ ${parseFloat(serv.preco).toFixed(2)})
-                    </label>
-                `;
-                containerCheck.appendChild(div);
-            });
+        async function carregarServicos() {
+            const container = document.getElementById('lista-servicos');
 
-            // Limpa os campos e mensagens de erro ao abrir
-            document.getElementById('modalNome').value = "";
-            document.getElementById('modalCPF').value = "";
-            document.getElementById('modalWpp').value = "";
-            document.getElementById('modalData').value = "";
-            document.getElementById('modalHora').value = "";
-            document.getElementById('modalCPF').classList.remove('is-invalid');
-            document.getElementById('modalWpp').classList.remove('is-invalid');
+            // Busca na tabela
+            const { data, error } = await client.from('servico_model').select('*');
 
-            const modal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
-            modal.show();
-        }
-
-        // 4. MÁSCARA E VALIDAÇÃO DE CPF
-        const inputCPF = document.getElementById('modalCPF');
-        inputCPF.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, "");
-            value = value.replace(/(\d{3})(\d)/, "$1.$2");
-            value = value.replace(/(\d{3})(\d)/, "$1.$2");
-            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-            e.target.value = value;
-        });
-
-        function validarCPF(cpf) {
-            cpf = cpf.replace(/[^\d]+/g,'');	
-            if(cpf == '') return false;	
-            if (cpf.length != 11 || 
-                /^(\d)\1+$/.test(cpf)) // Verifica sequências iguais (000, 111...)
-                    return false;		
-            
-            let add = 0;	
-            for (let i=0; i < 9; i ++)		
-                add += parseInt(cpf.charAt(i)) * (10 - i);	
-            let rev = 11 - (add % 11);	
-            if (rev == 10 || rev == 11) rev = 0;	
-            if (rev != parseInt(cpf.charAt(9))) return false;		
-            
-            add = 0;	
-            for (let i = 0; i < 10; i ++)		
-                add += parseInt(cpf.charAt(i)) * (11 - i);	
-            rev = 11 - (add % 11);	
-            if (rev == 10 || rev == 11) rev = 0;	
-            if (rev != parseInt(cpf.charAt(10))) return false;		
-            return true;   
-        }
-
-        // 5. MÁSCARA E VALIDAÇÃO DE WHATSAPP (NOVO)
-        const inputWpp = document.getElementById('modalWpp');
-        
-        // Aplica a máscara (XX) XXXXX-XXXX
-        inputWpp.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, "");
-            
-            // Limita a 11 dígitos para não estourar
-            if (value.length > 11) value = value.slice(0, 11);
-
-            // Aplica a formatação visual
-            if (value.length > 2) {
-                value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-            }
-            if (value.length > 9) { // Ajuste para o 9º dígito
-                value = `${value.slice(0, 10)}-${value.slice(10)}`;
-            }
-            e.target.value = value;
-        });
-
-        // 6. SALVAR AGENDAMENTO E ENVIAR WHATSAPP
-        document.getElementById('formAgendar').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const nome = document.getElementById('modalNome').value;
-            const cpf = document.getElementById('modalCPF').value;
-            const wpp = document.getElementById('modalWpp').value;
-            const data = document.getElementById('modalData').value;
-            const hora = document.getElementById('modalHora').value;
-            
-            // Remove máscara para contar os números do telefone
-            const wppNumeros = wpp.replace(/\D/g, "");
-
-            // --- VALIDAÇÕES ---
-            let temErro = false;
-
-            // 1. Serviços
-            const checkboxes = document.querySelectorAll('.servico-checkbox:checked');
-            let servicosSelecionados = [];
-            checkboxes.forEach((checkbox) => { servicosSelecionados.push(checkbox.value); });
-
-            if(servicosSelecionados.length === 0) {
-                alert("Por favor, selecione pelo menos um serviço.");
+            if (error) {
+                console.error('Erro:', error);
+                container.innerHTML = '<p class="text-center text-danger">Erro ao carregar serviços do banco.</p>';
                 return;
             }
 
-            // 2. CPF
-            if(!validarCPF(cpf)) {
-                document.getElementById('modalCPF').classList.add('is-invalid');
-                temErro = true;
-            } else {
-                document.getElementById('modalCPF').classList.remove('is-invalid');
+            if (!data || data.length === 0) {
+                 container.innerHTML = '<p class="text-center text-white">Nenhum serviço disponível no momento.</p>';
+                 return;
             }
 
-            // 3. Telefone (Tem que ter 11 dígitos: DDD + 9 + 8 números)
-            if(wppNumeros.length < 11) {
-                document.getElementById('modalWpp').classList.add('is-invalid');
-                temErro = true;
-            } else {
-                document.getElementById('modalWpp').classList.remove('is-invalid');
-            }
+            container.innerHTML = ''; 
 
-            if(temErro) return; // Para aqui se tiver erro
+            data.forEach(servico => {
+                const coluna = document.createElement('div');
+                coluna.className = 'col-md-4 col-sm-6';
+                const imagemServico = servico.imagem ? servico.imagem : 'serv01.png';
+                
+                // MUDANÇA AQUI: usando servico.nome_servico
+                const nomeReal = servico.nome_servico; 
 
-            // --- TUDO CERTO: SALVA ---
-            const novoAgendamento = {
-                id: Date.now(),
-                cliente: nome,
-                cpf: cpf,
-                whatsapp: wpp,
-                servico: servicosSelecionados.join(" + "), 
-                data: data,
-                hora: hora
-            };
+                coluna.innerHTML = `
+                    <div class="flip-container" onclick="virarCard(this)">
+                        <div class="flip-inner">
+                            <div class="flip-front">
+                                <h3 class="service-name-front">${nomeReal}</h3>
+                                <h2 class="service-price">R$ ${parseFloat(servico.preco).toFixed(2).replace('.', ',')}</h2>
+                                <a href="agendamento.html" class="btn-agendar-card" style="text-decoration:none;">
+                                    AGENDAR <i class="far fa-calendar-check"></i>
+                                </a>
+                                <small class="text-white mt-3" style="font-size: 0.8rem; opacity: 0.6;">(Clique na borda para virar)</small>
+                            </div>
+                            <div class="flip-back">
+                                <img src="${imagemServico}" alt="${nomeReal}">
+                                <div class="overlay-text">${nomeReal}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(coluna);
+            });
+        }
 
-            const listaAgendamentos = JSON.parse(localStorage.getItem('meusAgendamentos')) || [];
-            listaAgendamentos.push(novoAgendamento);
-            localStorage.setItem('meusAgendamentos', JSON.stringify(listaAgendamentos));
-
-            // Envia Zap
-            const dataBR = data.split('-').reverse().join('/');
-            const textoMensagem = `Olá, sou *${nome}* (CPF: ${cpf}).%0AGostaria de agendar:%0A✂️ *${servicosSelecionados.join(" + ")}*%0A📅 Data: ${dataBR}%0A⏰ Horário: ${hora}`;
-            const linkZap = `https://wa.me/${NUMERO_BARBEIRO}?text=${textoMensagem}`;
-
-            window.open(linkZap, '_blank');
-            alert('Agendamento salvo com sucesso!');
-            location.reload(); 
-        });
+        carregarServicos();
     </script>
 </body>
 </html>

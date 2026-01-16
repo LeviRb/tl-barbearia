@@ -3,358 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T & L | Agendamento</title>
+    <title>T & L | Agendar</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* CSS GLOBAL */
-        body {
-            background-color: #0f0f0f;
-            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Roboto Slab', serif;
-        }
-
-        /* NAVBAR */
-        .navbar-custom {
-            background-color: rgba(15, 15, 15, 0.95);
-            border-bottom: 2px solid #FFD700;
-            padding: 15px 0;
-            font-family: 'Rye', serif;
-        }
+        /* CSS ATUALIZADO */
+        body { background-color: #0f0f0f; background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px); color: white; min-height: 100vh; display: flex; flex-direction: column; font-family: 'Roboto Slab', serif; }
+        .navbar-custom { background-color: rgba(15, 15, 15, 0.95); border-bottom: 2px solid #FFD700; padding: 15px 0; font-family: 'Rye', serif; }
         .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; }
         .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
-        .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
+        .nav-link:hover { color: #FFD700 !important; }
         
-        .flex-grow-content { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; }
+        .main-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .booking-card { background-color: #1a1a1a; border: 1px solid #FFD700; border-radius: 20px; padding: 30px; width: 100%; max-width: 700px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+        .page-title { font-family: 'Rye', serif; color: #FFD700; text-align: center; margin-bottom: 30px; font-size: 2rem; }
+        .form-label { color: #FFD700; font-family: 'Rye', serif; margin-top: 15px; }
+        .form-control, .form-select { background-color: #252525; border: 1px solid #444; color: white; border-radius: 10px; padding: 12px; }
+        
+        /* Estilo dos Botões de Horário */
+        .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .time-btn { background-color: #252525; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center; font-family: 'Roboto Slab', serif; }
+        .time-btn:hover { border-color: #FFD700; background-color: #333; }
+        .time-btn.selected { background-color: #FFD700; color: black; font-weight: bold; transform: scale(1.05); }
+        .time-btn.disabled { opacity: 0.3; cursor: not-allowed; background-color: #111; border-color: #333; text-decoration: line-through; }
 
-        /* --- FORMULÁRIO DE AGENDAMENTO --- */
-        .agendamento-container {
-            width: 100%;
-            max-width: 600px;
-            padding: 20px;
-        }
+        .service-option { background-color: #252525; border: 1px solid #444; padding: 10px; margin-bottom: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .service-option.selected { border-color: #FFD700; background-color: rgba(255, 215, 0, 0.1); }
+        
+        .btn-confirmar { background-color: #FFD700; color: black; font-family: 'Rye', serif; font-size: 1.2rem; width: 100%; padding: 12px; border-radius: 50px; border: none; margin-top: 30px; transition: 0.3s; }
+        .btn-confirmar:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+        .btn-confirmar:disabled { background-color: #555; cursor: not-allowed; box-shadow: none; }
 
-        .main-title { 
-            font-family: 'Rye', serif; 
-            color: #FFD700; 
-            font-size: 3rem; 
-            text-align: center;
-            margin-bottom: 5px;
-        }
-        
-        .sub-title {
-            text-align: center;
-            color: #ccc;
-            margin-bottom: 40px;
-            font-size: 1rem;
-        }
-
-        /* Inputs Estilizados */
-        .form-label { color: #ccc; margin-top: 15px; font-weight: bold; }
-        
-        .custom-input, .custom-select {
-            background-color: #1a1a1a;
-            border: 1px solid #FFD700;
-            color: #999;
-            border-radius: 10px;
-            padding: 12px;
-            width: 100%;
-        }
-        
-        .custom-input:focus, .custom-select:focus {
-            background-color: #252525;
-            color: white;
-            outline: none;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-        }
-
-        /* --- NOVO: CONTAINER DE CHECKBOXES (Múltipla Escolha) --- */
-        .checkbox-group-container {
-            background-color: #1a1a1a;
-            border: 1px solid #FFD700;
-            border-radius: 10px;
-            padding: 15px;
-            max-height: 200px;
-            overflow-y: auto; /* Permite rolar se tiver muitos serviços */
-        }
-        
-        .form-check { margin-bottom: 8px; }
-        
-        .form-check-input {
-            background-color: #0f0f0f;
-            border-color: #FFD700;
-            cursor: pointer;
-        }
-        
-        .form-check-input:checked {
-            background-color: #FFD700;
-            border-color: #FFD700;
-        }
-        
-        .form-check-label {
-            color: white;
-            margin-left: 8px;
-            cursor: pointer;
-        }
-
-        /* Botão Confirmar */
-        .btn-confirmar {
-            background-color: transparent;
-            border: 2px solid #FFD700;
-            color: #FFD700;
-            font-family: 'Rye', serif;
-            font-size: 1.2rem;
-            width: 100%;
-            padding: 10px;
-            border-radius: 25px;
-            margin-top: 30px;
-            transition: all 0.3s;
-        }
-        
-        .btn-confirmar:hover {
-            background-color: #FFD700;
-            color: #000;
-            transform: scale(1.02);
-        }
-
-        /* Feedback de Erro */
-        .error-msg {
-            color: #ff4444;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            display: none;
-        }
-
-        /* Footer */
-        .footer { background-color: rgba(15, 15, 15, 0.95); border-top: 2px solid #FFD700; padding: 20px 0; margin-top: auto; width: 100%; }
-        .footer-item { display: flex; align-items: center; justify-content: center; gap: 10px; color: #fff; font-size: 14px; }
-        .footer-item i { color: #FFD700; font-size: 18px; }
+        .footer { background-color: rgba(15, 15, 15, 0.95); border-top: 2px solid #FFD700; padding: 20px 0; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">T & L | BarberShop</a>
-            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="navbar-brand" href="index.html">T & L BarberShop</a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link" href="horarios.html">Horários</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="agendamento.html">Agendamento</a></li>
-                    <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="nossoTime.html">Nosso time</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="agendamento.html">Agendar</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="flex-grow-content">
-        <div class="agendamento-container">
-            <h1 class="main-title"><i class="far fa-calendar-check"></i> Agendamento</h1>
-            <p class="sub-title">Preencha as informações a seguir para agendarmos o seu serviço</p>
-
-            <form id="formPaginaAgendamento">
-                
-                <label class="form-label">Quais serviços você deseja?</label>
-                <div class="checkbox-group-container" id="containerServicos">
-                    <p class="text-muted text-center" style="font-size:0.9rem;">Carregando serviços...</p>
+    <div class="main-container">
+        <div class="booking-card">
+            <h2 class="page-title"><i class="far fa-calendar-check"></i> Agendamento</h2>
+            
+            <form id="bookingForm">
+                <label class="form-label">1. Escolha o Serviço</label>
+                <div id="lista-servicos-selecao">
+                    <p class="text-secondary">Carregando serviços...</p>
                 </div>
-                <div class="error-msg" id="erroServico">Selecione pelo menos um serviço!</div>
+                <div id="resumo-total" class="text-end mt-2 text-warning fw-bold">Total: R$ 0,00</div>
 
-                <label class="form-label">Nome Completo</label>
-                <input type="text" class="custom-input" id="inputNome" placeholder="Como quer ser chamado?" required maxlength="50">
+                <label class="form-label">2. Escolha a Data</label>
+                <input type="date" id="dataAgendamento" class="form-control" required min="">
+                <small class="text-secondary">* Fechado aos Domingos</small>
 
-                <label class="form-label">CPF (Obrigatório)</label>
-                <input type="text" class="custom-input" id="inputCPF" placeholder="000.000.000-00" required maxlength="14">
-                <div class="error-msg" id="erroCPF">CPF Inválido!</div>
+                <label class="form-label">3. Escolha o Horário</label>
+                <div id="grid-horarios" class="time-grid">
+                    <p class="text-muted" style="grid-column: span 4; text-align: center;">Selecione uma data primeiro.</p>
+                </div>
+                <input type="hidden" id="horaSelecionada" required>
 
-                <label class="form-label">WhatsApp</label>
-                <input type="tel" class="custom-input" id="inputWpp" placeholder="(00) 00000-0000" required maxlength="15">
-                <div class="error-msg" id="erroWpp">Número incompleto!</div>
+                <label class="form-label">4. Seus Dados</label>
+                <input type="text" id="nomeCliente" class="form-control mb-2" required placeholder="Seu Nome Completo" maxlength="50">
+                
+                <div class="row">
+                    <div class="col-6">
+                        <input type="tel" id="whatsappCliente" class="form-control" required placeholder="WhatsApp" maxlength="15" oninput="mascaraTelefone(this)">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" id="cpfCliente" class="form-control" placeholder="CPF (Opcional)" maxlength="14" oninput="mascaraCPF(this)">
+                    </div>
+                </div>
 
-                <label class="form-label">Data do Agendamento</label>
-                <input type="date" class="custom-input" id="inputData" required>
-
-                <label class="form-label">Horário Disponível</label>
-                <select class="custom-select" id="inputHora" required>
-                    <option value="" selected disabled>Selecione um horário</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                    <option value="18:00">18:00</option>
-                    <option value="19:00">19:00</option>
-                </select>
-
-                <button type="submit" class="btn-confirmar">Confirmar Agendamento</button>
+                <button type="submit" class="btn-confirmar" id="btnSubmit">CONFIRMAR AGENDAMENTO</button>
             </form>
         </div>
     </div>
 
     <footer class="footer">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-12"><div class="footer-item"><span>T & L BarberShop System</span></div></div>
-            </div>
-        </div>
+        <div class="container text-center text-white"><i class="fas fa-cut"></i> T & L System</div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
-        // CONFIGURAÇÃO: NÚMERO DO BARBEIRO
-        const NUMERO_BARBEIRO = "5585982083975"; 
+        // CONFIGURAÇÃO SUPABASE
+        const SUPABASE_URL = 'https://judqyacdukuxwobxxyjg.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1ZHF5YWNkdWt1eHdvYnh4eWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTI2ODEsImV4cCI6MjA4MzQ4ODY4MX0.7jc4l2GGq2SiFnLAXYd_FfmLmpoP6RFsNo_K5iKg_II';
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 1. CARREGAR OS SERVIÇOS (AGORA COM CHECKBOXES)
-        const containerServicos = document.getElementById('containerServicos');
-        const servicosSalvos = JSON.parse(localStorage.getItem('meusServicos')) || [];
+        // --- REGRAS DE NEGÓCIO ---
+        const HORA_ABERTURA = 9;  // 09:00
+        const HORA_FECHAMENTO = 18; // 18:00
+        const ALMOCO_INICIO = 12; // 12:00
+        const ALMOCO_FIM = 14;    // 14:00
+        const INTERVALO_MINUTOS = 30;
 
-        containerServicos.innerHTML = ''; // Limpa
+        let servicosSelecionados = [];
+        let totalPreco = 0;
 
-        if (servicosSalvos.length > 0) {
-            servicosSalvos.forEach(serv => {
+        // --- 1. INICIALIZAÇÃO ---
+        window.onload = function() {
+            carregarServicos();
+            
+            // Define data mínima como hoje
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataAgendamento').min = hoje;
+        };
+
+        // --- 2. CARREGAR SERVIÇOS ---
+        async function carregarServicos() {
+            const container = document.getElementById('lista-servicos-selecao');
+            // ATENÇÃO: Usando a tabela correta que vimos no seu print: 'servico_model'
+            // E a coluna correta: 'nome_servico'
+            const { data, error } = await client.from('servico_model').select('*');
+
+            if (error) { container.innerHTML = 'Erro ao carregar.'; return; }
+            
+            container.innerHTML = '';
+            data.forEach(serv => {
                 const div = document.createElement('div');
-                div.className = 'form-check';
-                
+                div.className = 'service-option';
+                div.onclick = () => toggleServico(div, serv.nome_servico, serv.preco);
                 div.innerHTML = `
-                    <input class="form-check-input servico-checkbox" type="checkbox" value="${serv.nome}" id="chk_${serv.nome}">
-                    <label class="form-check-label" for="chk_${serv.nome}">
-                        ${serv.nome} <span style="color: #FFD700; font-size: 0.9em;">(R$ ${parseFloat(serv.preco).toFixed(2)})</span>
-                    </label>
+                    <div><strong>${serv.nome_servico}</strong> <small>R$ ${parseFloat(serv.preco).toFixed(2)}</small></div>
+                    <i class="fas fa-check text-warning" style="opacity: 0"></i>
                 `;
-                containerServicos.appendChild(div);
+                container.appendChild(div);
             });
-        } else {
-            containerServicos.innerHTML = '<p class="text-muted text-center pt-2">Nenhum serviço cadastrado no admin.</p>';
         }
 
-        // 2. MÁSCARAS E VALIDAÇÕES
-        const inputCPF = document.getElementById('inputCPF');
-        inputCPF.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, "");
-            value = value.replace(/(\d{3})(\d)/, "$1.$2");
-            value = value.replace(/(\d{3})(\d)/, "$1.$2");
-            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-            e.target.value = value;
-        });
+        function toggleServico(el, nome, preco) {
+            el.classList.toggle('selected');
+            const icon = el.querySelector('i');
+            icon.style.opacity = el.classList.contains('selected') ? 1 : 0;
 
-        const inputWpp = document.getElementById('inputWpp');
-        inputWpp.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.slice(0, 11);
-            if (value.length > 2) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-            if (value.length > 9) value = `${value.slice(0, 10)}-${value.slice(10)}`;
-            e.target.value = value;
-        });
-
-        function validarCPF(cpf) {
-            cpf = cpf.replace(/[^\d]+/g,'');	
-            if(cpf == '') return false;	
-            if (cpf.length != 11 || /^(\d)\1+$/.test(cpf)) return false;
-            let add = 0;	
-            for (let i=0; i < 9; i ++) add += parseInt(cpf.charAt(i)) * (10 - i);	
-            let rev = 11 - (add % 11);	
-            if (rev == 10 || rev == 11) rev = 0;	
-            if (rev != parseInt(cpf.charAt(9))) return false;		
-            add = 0;	
-            for (let i = 0; i < 10; i ++) add += parseInt(cpf.charAt(i)) * (11 - i);	
-            rev = 11 - (add % 11);	
-            if (rev == 10 || rev == 11) rev = 0;	
-            if (rev != parseInt(cpf.charAt(10))) return false;		
-            return true;   
+            if (el.classList.contains('selected')) {
+                servicosSelecionados.push(nome);
+                totalPreco += parseFloat(preco);
+            } else {
+                servicosSelecionados = servicosSelecionados.filter(s => s !== nome);
+                totalPreco -= parseFloat(preco);
+            }
+            document.getElementById('resumo-total').innerText = `Total: R$ ${totalPreco.toFixed(2)}`;
         }
 
-        // 3. SALVAR, ENVIAR ZAP E REDIRECIONAR
-        document.getElementById('formPaginaAgendamento').addEventListener('submit', function(e) {
+        // --- 3. LÓGICA DE DATA E HORÁRIO ---
+        document.getElementById('dataAgendamento').addEventListener('change', async function() {
+            const dataSelecionada = new Date(this.value);
+            const diaSemana = dataSelecionada.getUTCDay(); // 0 = Domingo, 6 = Sábado
+
+            // Regra: Fechado aos Domingos
+            if (diaSemana === 0) {
+                alert("A Barbearia não funciona aos domingos!");
+                this.value = '';
+                document.getElementById('grid-horarios').innerHTML = '';
+                return;
+            }
+
+            await gerarHorariosDisponiveis(this.value);
+        });
+
+        async function gerarHorariosDisponiveis(dataString) {
+            const grid = document.getElementById('grid-horarios');
+            grid.innerHTML = '<p class="text-center" style="grid-column: span 4">Verificando agenda...</p>';
+
+            // 1. Busca agendamentos já existentes no Supabase para esse dia
+            const { data: agendamentosOcupados, error } = await client
+                .from('agendamentos')
+                .select('hora')
+                .eq('data', dataString);
+
+            // Cria lista de horários ocupados (ex: ["09:00", "10:30"])
+            const ocupados = agendamentosOcupados ? agendamentosOcupados.map(ag => ag.hora) : [];
+
+            grid.innerHTML = ''; // Limpa
+
+            // 2. Loop para gerar horários (09:00 até 18:00)
+            for (let hora = HORA_ABERTURA; hora < HORA_FECHAMENTO; hora++) {
+                for (let min = 0; min < 60; min += INTERVALO_MINUTOS) {
+                    
+                    // Pula horário de almoço (12:00 até 13:30 - volta as 14:00)
+                    // Se for 12 ou 13 horas, ele pula
+                    if (hora >= ALMOCO_INICIO && hora < ALMOCO_FIM) continue;
+
+                    // Formata HH:MM
+                    const horaFormatada = `${String(hora).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+
+                    // Cria o botão
+                    const btn = document.createElement('div');
+                    btn.className = 'time-btn';
+                    btn.innerText = horaFormatada;
+
+                    // Verifica se já está ocupado
+                    if (ocupados.includes(horaFormatada)) {
+                        btn.classList.add('disabled');
+                        btn.title = "Horário indisponível";
+                    } else {
+                        btn.onclick = () => selecionarHorario(btn, horaFormatada);
+                    }
+
+                    grid.appendChild(btn);
+                }
+            }
+        }
+
+        function selecionarHorario(btn, hora) {
+            // Remove seleção anterior
+            document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+            // Seleciona novo
+            btn.classList.add('selected');
+            document.getElementById('horaSelecionada').value = hora;
+        }
+
+        // --- 4. ENVIAR E MÁSCARAS ---
+        function mascaraTelefone(i){
+            let v = i.value.replace(/\D/g,"");
+            v=v.replace(/^(\d{2})(\d)/g,"($1) $2");
+            v=v.replace(/(\d)(\d{4})$/,"$1-$2");
+            i.value = v;
+        }
+        function mascaraCPF(i){
+            let v = i.value.replace(/\D/g,"");
+            v=v.replace(/(\d{3})(\d)/,"$1.$2");
+            v=v.replace(/(\d{3})(\d)/,"$1.$2");
+            v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+            i.value = v;
+        }
+
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Pega todos os checkboxes marcados
-            const checkboxes = document.querySelectorAll('.servico-checkbox:checked');
-            let servicosSelecionados = [];
-            checkboxes.forEach((checkbox) => {
-                servicosSelecionados.push(checkbox.value);
-            });
+            const hora = document.getElementById('horaSelecionada').value;
+            if(!hora) { alert("Selecione um horário!"); return; }
+            if(servicosSelecionados.length === 0) { alert("Selecione um serviço!"); return; }
 
-            const nome = document.getElementById('inputNome').value;
-            const cpf = document.getElementById('inputCPF').value;
-            const wpp = document.getElementById('inputWpp').value;
-            const data = document.getElementById('inputData').value;
-            const hora = document.getElementById('inputHora').value;
+            const nome = document.getElementById('nomeCliente').value;
+            const wpp = document.getElementById('whatsappCliente').value;
+            const cpf = document.getElementById('cpfCliente').value;
+            const data = document.getElementById('dataAgendamento').value;
 
-            // VALIDAÇÕES
-            let temErro = false;
-
-            // Valida Serviço
-            if (servicosSelecionados.length === 0) {
-                document.getElementById('erroServico').style.display = 'block';
-                temErro = true;
-            } else {
-                document.getElementById('erroServico').style.display = 'none';
-            }
-
-            // Valida CPF
-            if(!validarCPF(cpf)) {
-                document.getElementById('erroCPF').style.display = 'block';
-                temErro = true;
-            } else {
-                document.getElementById('erroCPF').style.display = 'none';
-            }
-
-            // Valida Whatsapp
-            const wppNumeros = wpp.replace(/\D/g, "");
-            if(wppNumeros.length < 11) {
-                document.getElementById('erroWpp').style.display = 'block';
-                temErro = true;
-            } else {
-                document.getElementById('erroWpp').style.display = 'none';
-            }
-
-            if(temErro) return;
-
-            // --- A. SALVAR ---
             const novoAgendamento = {
-                id: Date.now(),
                 cliente: nome,
-                cpf: cpf,
                 whatsapp: wpp,
-                servico: servicosSelecionados.join(" + "), // Junta os nomes com +
+                cpf: cpf,
+                servico: servicosSelecionados.join(" + "),
                 data: data,
                 hora: hora
             };
 
-            const listaAgendamentos = JSON.parse(localStorage.getItem('meusAgendamentos')) || [];
-            listaAgendamentos.push(novoAgendamento);
-            localStorage.setItem('meusAgendamentos', JSON.stringify(listaAgendamentos));
+            const { error } = await client.from('agendamentos').insert([novoAgendamento]);
 
-            // --- B. ENVIAR WHATSAPP ---
-            const dataBR = data.split('-').reverse().join('/');
-            
-            const textoMensagem = `Olá, sou *${nome}* (CPF: ${cpf}).%0AGostaria de agendar:%0A✂️ *${servicosSelecionados.join(" + ")}*%0A📅 Data: ${dataBR}%0A⏰ Horário: ${hora}`;
-            
-            const linkZap = `https://wa.me/${NUMERO_BARBEIRO}?text=${textoMensagem}`;
-
-            window.open(linkZap, '_blank');
-
-            // --- C. REDIRECIONAR ---
-            alert('Agendamento confirmado! Redirecionando para seus agendamentos...');
-            window.location.href = 'meusAgendamentos.html';
+            if (error) {
+                alert("Erro ao agendar: " + error.message);
+            } else {
+                alert("Agendamento Confirmado!");
+                // Redireciona para o Zap
+                const msg = `Olá! Agendei: ${novoAgendamento.servico} para dia ${data} às ${hora}. Nome: ${nome}`;
+                window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`, '_blank');
+                window.location.reload();
+            }
         });
     </script>
 </body>
