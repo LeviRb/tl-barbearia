@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T & L | Barber Shop - Nosso Time</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS GLOBAL --- */
+        body {
+            background-color: #0f0f0f;
+            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Essencial para o footer */
+            font-family: 'Roboto Slab', serif;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar-custom {
+            background-color: rgba(15, 15, 15, 0.95);
+            border-bottom: 2px solid #FFD700;
+            padding: 15px 0;
+            font-family: 'Rye', serif;
+        }
+        .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; text-shadow: 1px 1px 2px black; }
+        .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
+
+        /* --- CLASSE PARA EMPURRAR O FOOTER --- */
+        .flex-grow-content {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* --- CONTEÚDO ESPECÍFICO --- */
+        .page-title {
+            text-align: center;
+            font-family: 'Rye', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .barber-name {
+            text-align: center;
+            font-family: 'Rye', serif;
+            color: #FFD700;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo da Foto em Arco */
+        .photo-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 100%;
+        }
+        
+        .barber-photo {
+            width: 100%;
+            max-width: 350px;
+            height: 450px; /* Altura fixa */
+            object-fit: cover;
+            border-radius: 200px 200px 0 0; 
+            border: 3px solid #FF8C00;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Caixa de Texto */
+        .bio-box {
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.3);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .bio-highlight {
+            color: #FFD700;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .bio-footer {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            display: block;
+        }
+
+        /* --- FOOTER PADRONIZADO --- */
+        .footer {
+            background-color: rgba(15, 15, 15, 0.95);
+            border-top: 2px solid #FFD700;
+            padding: 20px 0;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #fff;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .footer-item i {
+            color: #FFD700;
+            font-size: 18px;
+        }
+
+        .footer a { color: #fff; text-decoration: none; }
+        .footer a:hover { color: #FFD700; }
+
+        @media (max-width: 768px) {
+            .footer-item { justify-content: flex-start; margin-bottom: 10px; }
+            .col-md-3 { margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">T & L | BarberShop</a>
+            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="horarios.html">Horários</a></li>
+                    <li class="nav-item"><a class="nav-link" href="agendamento.html">Agendamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="nossotime.html">Nosso time</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5 flex-grow-content">
+        
+        <h2 class="page-title">Nosso time</h2>
+        <h1 class="barber-name"><i class="fas fa-cut"></i> Samuel</h1>
+
+        <div class="row align-items-center g-5">
+            
+            <div class="col-md-5 order-md-1 order-1">
+                <div class="photo-container">
+                    <img src="imgs/barbeiro.jpeg" alt="Barbeiro Samuel" class="barber-photo">
+                </div>
+            </div>
+
+            <div class="col-md-7 order-md-2 order-2">
+                <div class="bio-box">
+                    <span class="bio-highlight">
+                        Mais que um Corte, um Legado: A História da T&L BarberShop
+                    </span>
+                    
+                    <p>
+                        Tudo começou com uma cadeira simples, um espelho e uma visão clara: a barbearia não deveria ser apenas um lugar para cortar o cabelo, mas um ambiente de resgate da autoestima e de convivência.
+                    </p>
+                    <p>
+                        A história do fundador da T&L BarberShop, Samuel, é marcada pela paixão pela arte da tesoura e da navalha. Atuando como barbeiro desde 2014, o objetivo sempre foi o mesmo desde os primeiros cortes: oferecer excelência em cada detalhe.
+                    </p>
+                    <p>
+                        A T&L nasceu da vontade de unir a tradição da barbearia clássica com as técnicas e o estilo do homem moderno. O nome carrega o peso de anos de trabalho e dedicação para construir um espaço onde o cliente se sente em casa.
+                    </p>
+                    <p>
+                        Hoje, a T&L BarberShop é mais do que uma barbearia; é um ponto de encontro. Aqui, prezamos pelo atendimento personalizado, pela navalha afiada e pela cerveja gelada. Seja para um degradê perfeito, uma barba modelada na toalha quente ou apenas uma boa conversa, a cadeira da T&L é o lugar onde o estilo encontra a tradição.
+                    </p>
+
+                    <span class="bio-footer">
+                        T&L BarberShop: O seu estilo, a nossa história.
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fab fa-instagram"></i>
+                        <a href="#">@tlbarbershop</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>(11) 91234-5678</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rua Exemplo, 123</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

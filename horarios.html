@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T & L | Barber Shop - Horários</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS GLOBAL --- */
+        body {
+            background-color: #0f0f0f;
+            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Essencial para o footer */
+            font-family: 'Roboto Slab', serif;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar-custom {
+            background-color: rgba(15, 15, 15, 0.95);
+            border-bottom: 2px solid #FFD700;
+            padding: 15px 0;
+            font-family: 'Rye', serif;
+        }
+        .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; text-shadow: 1px 1px 2px black; }
+        .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
+
+        /* --- CLASSE PARA EMPURRAR O FOOTER --- */
+        .flex-grow-content {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* --- TÍTULOS --- */
+        .main-title {
+            font-family: 'Rye', serif;
+            color: #FFD700;
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 5px;
+        }
+        .main-title i { margin-right: 10px; }
+
+        .sub-title {
+            font-size: 1.1rem;
+            color: #FFD700;
+            margin-bottom: 50px;
+            font-family: 'Rye', serif; 
+        }
+
+        /* --- CARDS PADRÃO --- */
+        .info-card {
+            border: 2px solid white;
+            border-radius: 25px;
+            padding: 40px 20px;
+            text-align: center;
+            background: transparent;
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #FFD700;
+        }
+
+        .card-icon { font-size: 2.5rem; color: #FFD700; margin-bottom: 20px; }
+        .info-label { font-family: 'Rye', serif; color: #FFD700; font-size: 1.8rem; margin-bottom: 10px; }
+        .info-value { font-family: 'Rye', serif; font-size: 1.6rem; color: white; margin: 0; }
+        .card-highlight { border-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); }
+
+        /* --- CARD OBS --- */
+        .obs-card {
+            height: auto; 
+            padding: 30px;
+        }
+        .obs-container {
+            display: inline-block;
+            text-align: left;
+        }
+        .obs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .obs-list li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+        .obs-list li i {
+            color: #FFD700;
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* --- FOOTER PADRONIZADO --- */
+        .footer {
+            background-color: rgba(15, 15, 15, 0.95);
+            border-top: 2px solid #FFD700;
+            padding: 20px 0;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #fff;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .footer-item i {
+            color: #FFD700;
+            font-size: 18px;
+        }
+
+        .footer a { color: #fff; text-decoration: none; }
+        .footer a:hover { color: #FFD700; }
+
+        @media (max-width: 768px) {
+            .footer-item { justify-content: flex-start; margin-bottom: 10px; }
+            .col-md-3 { margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">T & L | BarberShop</a>
+            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="horarios.html">Horários</a></li>
+                    <li class="nav-item"><a class="nav-link" href="agendamento.html">Agendamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="nossotime.html">Nosso Time</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5 flex-grow-content">
+        
+        <div class="text-center">
+            <h1 class="main-title"><i class="far fa-clock"></i> Horários</h1>
+            <p class="sub-title">Nossos horários de funcionamento</p>
+        </div>
+
+        <div class="row g-4 justify-content-center mt-3">
+            <div class="col-md-4 col-sm-6">
+                <div class="info-card">
+                    <i class="fas fa-calendar-alt card-icon"></i>
+                    <h3 class="info-label">Funcionamento</h3>
+                    <h2 class="info-value">Segunda à Sábado</h2>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="info-card card-highlight">
+                    <i class="fas fa-door-open card-icon"></i>
+                    <h3 class="info-label">Aberto</h3>
+                    <h2 class="info-value" id="displayHorario">08:00 às 19:00</h2>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="info-card">
+                    <i class="fas fa-utensils card-icon"></i>
+                    <h3 class="info-label">Pausa</h3>
+                    <h2 class="info-value" id="displayPausa">12:00 às 14:00</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-12"> 
+                <div class="info-card obs-card">
+                    <h3 class="info-label">OBS</h3>
+                    
+                    <div class="obs-container">
+                        <ul class="obs-list">
+                            <li>
+                                <i class="fas fa-hourglass-half"></i> 
+                                1. Cada corte tem duração de 40 minutos
+                            </li>
+                            <li>
+                                <i class="fas fa-exclamation-circle"></i> 
+                                2. Em caso de o cliente faltar, haverá uma punição
+                            </li>
+                            <li>
+                                <i class="fas fa-ban"></i> 
+                                3. Em dias de feriados não funcionamos
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fab fa-instagram"></i>
+                        <a href="#">@tlbarbershop</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>(11) 91234-5678</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rua Exemplo, 123</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quando a página carregar, busca os dados salvos
+        window.addEventListener('load', function() {
+            // Recupera do LocalStorage
+            const abertura = localStorage.getItem('barber_abertura');
+            const fechamento = localStorage.getItem('barber_fechamento');
+            const almocoIni = localStorage.getItem('barber_almocoIni');
+            const almocoFim = localStorage.getItem('barber_almocoFim');
+
+            // Se existirem dados salvos, atualiza o texto na tela
+            if (abertura && fechamento) {
+                document.getElementById('displayHorario').innerText = abertura + ' às ' + fechamento;
+            }
+
+            if (almocoIni && almocoFim) {
+                document.getElementById('displayPausa').innerText = almocoIni + ' às ' + almocoFim;
+            }
+        });
+    </script>
+</body>
+</html>

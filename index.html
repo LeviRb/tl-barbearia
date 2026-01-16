@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T & L | Barber Shop - Início</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS GLOBAL */
+        body {
+            background-color: #0f0f0f;
+            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Rye', serif;
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            background-color: rgba(15, 15, 15, 0.95);
+            border-bottom: 2px solid #FFD700;
+            padding: 15px 0;
+        }
+        .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; text-shadow: 1px 1px 2px black; }
+        .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
+
+        /* CONTEÚDO DA PÁGINA */
+        .flex-grow-content {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Estilos Home */
+        .brand-title { 
+            font-size: 3rem; 
+            color: white; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
+        }
+
+        /* --- CORREÇÃO AQUI NA CAIXA DO MENU --- */
+        .menu-box { 
+            border: 2px solid #FFD700; 
+            border-radius: 30px; 
+            padding: 10px 40px; 
+            max-width: 500px; 
+            width: 100%; /* Garante que ocupe o espaço para centralizar */
+            margin: 0 auto 50px auto; /* Adicionei 50px embaixo para desgrudar do footer */
+        }
+        /* -------------------------------------- */
+
+        .menu-link-box { display: block; text-decoration: none; color: white; font-size: 1.2rem; padding: 15px 0; text-align: center; border-bottom: 1px solid #FFD700; transition: transform 0.2s; }
+        .menu-link-box:last-child { border-bottom: none; }
+        .menu-link-box:hover { color: #FFD700; transform: scale(1.05); }
+        .main-logo { max-width: 100%; height: auto; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+
+        /* FOOTER */
+        .footer {
+            background-color: rgba(15, 15, 15, 0.95);
+            border-top: 2px solid #FFD700;
+            padding: 20px 0;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #fff;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .footer-item i {
+            color: #FFD700;
+            font-size: 18px;
+        }
+
+        .footer a { color: #fff; text-decoration: none; }
+        .footer a:hover { color: #FFD700; }
+        
+        @media (max-width: 768px) {
+            .footer-item { justify-content: flex-start; margin-bottom: 10px; }
+            .col-md-3 { margin-bottom: 15px; }
+            
+            /* Ajuste extra para a logo não colar no topo em celulares */
+            .main-logo { margin-bottom: 20px; margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">T & L | BarberShop</a>
+            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="horarios.html">Horários</a></li>
+                    <li class="nav-item"><a class="nav-link" href="agendamento.html">Agendamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="nossotime.html">Nosso Time</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content flex-grow-content">
+        <div class="row align-items-center w-100 g-0"> <div class="col-md-6 text-center mb-4 mb-md-0">
+                <img src="logoBArber.png" alt="Logo T&L Barber Shop" class="main-logo">
+            </div>
+            <div class="col-md-6">
+                <h1 class="brand-title">T & L | Barber<br>Shop</h1>
+                
+                <div class="menu-box">
+                    <a href="servicos.html" class="menu-link-box">Serviços</a>
+                    <a href="horarios.html" class="menu-link-box">Horários</a>
+                    <a href="agendamento.html" class="menu-link-box">Agendamento</a>
+                    <a href="meusAgendamentos.html" class="menu-link-box">Meus Agendamentos</a>
+                    <a href="nossoTime.html" class="menu-link-box">Nosso time</a>
+                    <a href="#" class="menu-link-box">Quem somos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fab fa-instagram"></i>
+                        <a href="#">@tlbarbershop</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>(11) 91234-5678</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rua Exemplo, 123</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
