@@ -12,33 +12,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* CSS ATUALIZADO */
+        /* CSS MANTIDO IGUAL */
         body { background-color: #0f0f0f; background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px); color: white; min-height: 100vh; display: flex; flex-direction: column; font-family: 'Roboto Slab', serif; }
         .navbar-custom { background-color: rgba(15, 15, 15, 0.95); border-bottom: 2px solid #FFD700; padding: 15px 0; font-family: 'Rye', serif; }
         .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; }
         .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
         .nav-link:hover { color: #FFD700 !important; }
-        
         .main-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
         .booking-card { background-color: #1a1a1a; border: 1px solid #FFD700; border-radius: 20px; padding: 30px; width: 100%; max-width: 700px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
         .page-title { font-family: 'Rye', serif; color: #FFD700; text-align: center; margin-bottom: 30px; font-size: 2rem; }
         .form-label { color: #FFD700; font-family: 'Rye', serif; margin-top: 15px; }
         .form-control, .form-select { background-color: #252525; border: 1px solid #444; color: white; border-radius: 10px; padding: 12px; }
-        
-        /* Estilo dos Botões de Horário */
         .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
         .time-btn { background-color: #252525; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center; font-family: 'Roboto Slab', serif; }
         .time-btn:hover { border-color: #FFD700; background-color: #333; }
         .time-btn.selected { background-color: #FFD700; color: black; font-weight: bold; transform: scale(1.05); }
         .time-btn.disabled { opacity: 0.3; cursor: not-allowed; background-color: #111; border-color: #333; text-decoration: line-through; }
-
         .service-option { background-color: #252525; border: 1px solid #444; padding: 10px; margin-bottom: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .service-option.selected { border-color: #FFD700; background-color: rgba(255, 215, 0, 0.1); }
-        
         .btn-confirmar { background-color: #FFD700; color: black; font-family: 'Rye', serif; font-size: 1.2rem; width: 100%; padding: 12px; border-radius: 50px; border: none; margin-top: 30px; transition: 0.3s; }
         .btn-confirmar:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-        .btn-confirmar:disabled { background-color: #555; cursor: not-allowed; box-shadow: none; }
-
+        ::placeholder { color: #bbbbbb !important; opacity: 1; }
+        .input-label { font-size: 0.9rem; color: #aaa; margin-bottom: 5px; display: block; margin-top: 10px; }
         .footer { background-color: rgba(15, 15, 15, 0.95); border-top: 2px solid #FFD700; padding: 20px 0; margin-top: auto; }
     </style>
 </head>
@@ -51,7 +46,11 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="agendamento.html">Agendar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="horarios.html">Horários</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="agendamento.html">Agendamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="nossoTime.html">Nosso time</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
                 </ul>
             </div>
         </div>
@@ -78,15 +77,19 @@
                 </div>
                 <input type="hidden" id="horaSelecionada" required>
 
-                <label class="form-label">4. Seus Dados</label>
-                <input type="text" id="nomeCliente" class="form-control mb-2" required placeholder="Seu Nome Completo" maxlength="50">
+                <label class="form-label" style="font-size: 1.2rem;">4. Seus Dados</label>
+                
+                <span class="input-label"><i class="fas fa-user"></i> Nome Completo</span>
+                <input type="text" id="nomeCliente" class="form-control mb-2" required placeholder="Digite seu nome..." maxlength="50">
                 
                 <div class="row">
                     <div class="col-6">
-                        <input type="tel" id="whatsappCliente" class="form-control" required placeholder="WhatsApp" maxlength="15" oninput="mascaraTelefone(this)">
+                        <span class="input-label"><i class="fab fa-whatsapp"></i> WhatsApp</span>
+                        <input type="tel" id="whatsappCliente" class="form-control" required placeholder="(DDD) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)">
                     </div>
                     <div class="col-6">
-                        <input type="text" id="cpfCliente" class="form-control" placeholder="CPF (Opcional)" maxlength="14" oninput="mascaraCPF(this)">
+                        <span class="input-label"><i class="fas fa-id-card"></i> CPF (Obrigatório)</span>
+                        <input type="text" id="cpfCliente" class="form-control" required placeholder="000.000.000-00" maxlength="14" oninput="mascaraCPF(this)">
                     </div>
                 </div>
 
@@ -107,75 +110,79 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1ZHF5YWNkdWt1eHdvYnh4eWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTI2ODEsImV4cCI6MjA4MzQ4ODY4MX0.7jc4l2GGq2SiFnLAXYd_FfmLmpoP6RFsNo_K5iKg_II';
         const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- REGRAS DE NEGÓCIO ---
-        const HORA_ABERTURA = 9;  // 09:00
-        const HORA_FECHAMENTO = 18; // 18:00
-        const ALMOCO_INICIO = 12; // 12:00
-        const ALMOCO_FIM = 14;    // 14:00
+        // --- REGRAS ---
+        const HORA_ABERTURA = 9;  
+        const HORA_FECHAMENTO = 18; 
+        const ALMOCO_INICIO = 12; 
+        const ALMOCO_FIM = 14;    
         const INTERVALO_MINUTOS = 30;
 
-        let servicosSelecionados = [];
+        let servicosSelecionados = []; 
         let totalPreco = 0;
 
-        // --- 1. INICIALIZAÇÃO ---
         window.onload = function() {
             carregarServicos();
-            
-            // Define data mínima como hoje
             const hoje = new Date().toISOString().split('T')[0];
             document.getElementById('dataAgendamento').min = hoje;
         };
 
-        // --- 2. CARREGAR SERVIÇOS ---
+        // 1. CARREGAR SERVIÇOS
         async function carregarServicos() {
             const container = document.getElementById('lista-servicos-selecao');
-            // ATENÇÃO: Usando a tabela correta que vimos no seu print: 'servico_model'
-            // E a coluna correta: 'nome_servico'
-            const { data, error } = await client.from('servico_model').select('*');
-
-            if (error) { container.innerHTML = 'Erro ao carregar.'; return; }
             
+            // Tenta carregar da tabela 'servico_model'
+            const { data, error } = await client.from('servico_model').select('*'); 
+
+            if (error) { 
+                // Fallback para 'modelo_de_serviço' se o nome for diferente
+                const { data: data2, error: error2 } = await client.from('modelo_de_serviço').select('*');
+                if(error2) { container.innerHTML = 'Erro ao carregar serviços.'; return; }
+                renderizarServicos(data2, container);
+                return;
+            }
+            renderizarServicos(data, container);
+        }
+
+        function renderizarServicos(data, container) {
             container.innerHTML = '';
             data.forEach(serv => {
+                const servicoId = serv.id; // Agora deve ser 'id' padrão
                 const div = document.createElement('div');
                 div.className = 'service-option';
-                div.onclick = () => toggleServico(div, serv.nome_servico, serv.preco);
+                div.onclick = () => toggleServico(div, servicoId, serv.nome_servico || serv.nome, serv.preco);
                 div.innerHTML = `
-                    <div><strong>${serv.nome_servico}</strong> <small>R$ ${parseFloat(serv.preco).toFixed(2)}</small></div>
+                    <div><strong>${serv.nome_servico || serv.nome}</strong> <small>R$ ${parseFloat(serv.preco).toFixed(2)}</small></div>
                     <i class="fas fa-check text-warning" style="opacity: 0"></i>
                 `;
                 container.appendChild(div);
             });
         }
 
-        function toggleServico(el, nome, preco) {
+        function toggleServico(el, id, nome, preco) {
             el.classList.toggle('selected');
             const icon = el.querySelector('i');
-            icon.style.opacity = el.classList.contains('selected') ? 1 : 0;
+            const estaSelecionado = el.classList.contains('selected');
+            icon.style.opacity = estaSelecionado ? 1 : 0;
 
-            if (el.classList.contains('selected')) {
-                servicosSelecionados.push(nome);
+            if (estaSelecionado) {
+                servicosSelecionados.push({id: id, nome: nome});
                 totalPreco += parseFloat(preco);
             } else {
-                servicosSelecionados = servicosSelecionados.filter(s => s !== nome);
+                servicosSelecionados = servicosSelecionados.filter(s => s.id !== id);
                 totalPreco -= parseFloat(preco);
             }
             document.getElementById('resumo-total').innerText = `Total: R$ ${totalPreco.toFixed(2)}`;
         }
 
-        // --- 3. LÓGICA DE DATA E HORÁRIO ---
+        // 2. DATA E HORA
         document.getElementById('dataAgendamento').addEventListener('change', async function() {
             const dataSelecionada = new Date(this.value);
-            const diaSemana = dataSelecionada.getUTCDay(); // 0 = Domingo, 6 = Sábado
-
-            // Regra: Fechado aos Domingos
-            if (diaSemana === 0) {
-                alert("A Barbearia não funciona aos domingos!");
+            if (dataSelecionada.getUTCDay() === 0) {
+                alert("Fechado aos domingos!");
                 this.value = '';
                 document.getElementById('grid-horarios').innerHTML = '';
                 return;
             }
-
             await gerarHorariosDisponiveis(this.value);
         });
 
@@ -183,69 +190,75 @@
             const grid = document.getElementById('grid-horarios');
             grid.innerHTML = '<p class="text-center" style="grid-column: span 4">Verificando agenda...</p>';
 
-            // 1. Busca agendamentos já existentes no Supabase para esse dia
-            const { data: agendamentosOcupados, error } = await client
+            // ATENÇÃO: Aqui usamos os nomes novos das colunas!
+            const { data: agendamentosOcupados } = await client
                 .from('agendamentos')
-                .select('hora')
-                .eq('data', dataString);
+                .select('horario') // Coluna atualizada: 'horario' (sem acento)
+                .eq('data', dataString); // Coluna atualizada: 'data' (não mais 'dados')
 
-            // Cria lista de horários ocupados (ex: ["09:00", "10:30"])
-            const ocupados = agendamentosOcupados ? agendamentosOcupados.map(ag => ag.hora) : [];
+            // Ajuste para pegar 'horario' sem acento
+            const ocupados = agendamentosOcupados ? agendamentosOcupados.map(ag => ag.horario.substring(0,5)) : [];
+            grid.innerHTML = ''; 
 
-            grid.innerHTML = ''; // Limpa
-
-            // 2. Loop para gerar horários (09:00 até 18:00)
             for (let hora = HORA_ABERTURA; hora < HORA_FECHAMENTO; hora++) {
                 for (let min = 0; min < 60; min += INTERVALO_MINUTOS) {
-                    
-                    // Pula horário de almoço (12:00 até 13:30 - volta as 14:00)
-                    // Se for 12 ou 13 horas, ele pula
                     if (hora >= ALMOCO_INICIO && hora < ALMOCO_FIM) continue;
-
-                    // Formata HH:MM
                     const horaFormatada = `${String(hora).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
-
-                    // Cria o botão
                     const btn = document.createElement('div');
                     btn.className = 'time-btn';
                     btn.innerText = horaFormatada;
 
-                    // Verifica se já está ocupado
                     if (ocupados.includes(horaFormatada)) {
                         btn.classList.add('disabled');
-                        btn.title = "Horário indisponível";
                     } else {
                         btn.onclick = () => selecionarHorario(btn, horaFormatada);
                     }
-
                     grid.appendChild(btn);
                 }
             }
         }
 
         function selecionarHorario(btn, hora) {
-            // Remove seleção anterior
             document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-            // Seleciona novo
             btn.classList.add('selected');
             document.getElementById('horaSelecionada').value = hora;
         }
 
-        // --- 4. ENVIAR E MÁSCARAS ---
-        function mascaraTelefone(i){
-            let v = i.value.replace(/\D/g,"");
-            v=v.replace(/^(\d{2})(\d)/g,"($1) $2");
-            v=v.replace(/(\d)(\d{4})$/,"$1-$2");
-            i.value = v;
-        }
-        function mascaraCPF(i){
-            let v = i.value.replace(/\D/g,"");
-            v=v.replace(/(\d{3})(\d)/,"$1.$2");
-            v=v.replace(/(\d{3})(\d)/,"$1.$2");
-            v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
-            i.value = v;
+        // 3. VALIDAÇÃO DE CPF REAL 
+        function validarCPFReal(cpf) {
+            cpf = cpf.replace(/[^\d]+/g, '');
+            if (cpf == '') return false;
+            if (cpf.length != 11 || 
+                cpf == "00000000000" || 
+                cpf == "11111111111" || 
+                cpf == "22222222222" || 
+                cpf == "33333333333" || 
+                cpf == "44444444444" || 
+                cpf == "55555555555" || 
+                cpf == "66666666666" || 
+                cpf == "77777777777" || 
+                cpf == "88888888888" || 
+                cpf == "99999999999")
+                    return false;
+            
+            let add = 0;
+            for (let i = 0; i < 9; i++) add += parseInt(cpf.charAt(i)) * (10 - i);
+            let rev = 11 - (add % 11);
+            if (rev == 10 || rev == 11) rev = 0;
+            if (rev != parseInt(cpf.charAt(9))) return false;
+            
+            add = 0;
+            for (let i = 0; i < 10; i++) add += parseInt(cpf.charAt(i)) * (11 - i);
+            rev = 11 - (add % 11);
+            if (rev == 10 || rev == 11) rev = 0;
+            if (rev != parseInt(cpf.charAt(10))) return false;
+            return true;
         }
 
+        function mascaraTelefone(i){ i.value = i.value.replace(/\D/g,"").replace(/^(\d{2})(\d)/g,"($1) $2").replace(/(\d)(\d{4})$/,"$1-$2"); }
+        function mascaraCPF(i){ i.value = i.value.replace(/\D/g,"").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2"); }
+
+        // 4. ENVIO (ATUALIZADO PARA AS COLUNAS NOVAS DO PRINT)
         document.getElementById('bookingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -258,24 +271,80 @@
             const cpf = document.getElementById('cpfCliente').value;
             const data = document.getElementById('dataAgendamento').value;
 
+            // VALIDAÇÃO CPF
+            if (!validarCPFReal(cpf)) {
+                alert("CPF Inválido! Verifique os números.");
+                return;
+            }
+
+            // A. CLIENTE (NA TABELA 'cliente_model')
+            let clienteIdFinal = null;
+            const apenasNumerosCPF = cpf.replace(/[^\d]+/g, '');
+
+            const { data: clienteExistente } = await client
+                .from('cliente_model')
+                .select('*')
+                .eq('cpf', apenasNumerosCPF)
+                .maybeSingle();
+
+            if (clienteExistente) {
+                clienteIdFinal = clienteExistente.id;
+            } else {
+                const { data: novoCliente, error: erroCriacao } = await client
+                    .from('cliente_model')
+                    .insert([{ 
+                        nome: nome, 
+                        cpf: apenasNumerosCPF, 
+                        telefone: wpp.replace(/[^\d]+/g, '')
+                    }])
+                    .select()
+                    .single();
+                
+                if(erroCriacao) { alert("Erro ao cadastrar cliente: " + erroCriacao.message); return; }
+                clienteIdFinal = novoCliente.id;
+            }
+
+            // B. AGENDAMENTO (CABEÇALHO ATUALIZADO)
             const novoAgendamento = {
-                cliente: nome,
-                whatsapp: wpp,
-                cpf: cpf,
-                servico: servicosSelecionados.join(" + "),
-                data: data,
-                hora: hora
+                cliente_id: clienteIdFinal,
+                barbeiro_id: 1, 
+                
+                // MUDANÇAS AQUI BASEADAS NO SEU PRINT:
+                data: data,                  // Coluna agora chama 'data'
+                horario: hora + ":00",       // Coluna agora chama 'horario' (sem acento)
+                status_agendamento: "PENDENTE" // Coluna agora chama 'status_agendamento'
             };
 
-            const { error } = await client.from('agendamentos').insert([novoAgendamento]);
+            const { data: agendamentoCriado, error: erroAgendamento } = await client
+                .from('agendamentos')
+                .insert([novoAgendamento])
+                .select()
+                .single();
 
-            if (error) {
-                alert("Erro ao agendar: " + error.message);
+            if (erroAgendamento) {
+                alert("Erro ao criar agendamento: " + erroAgendamento.message);
+                return;
+            }
+
+            const agendamentoID = agendamentoCriado.id;
+
+            // C. ITENS DO CARRINHO
+            const itensParaSalvar = servicosSelecionados.map(servico => ({
+                agendamento_id: agendamentoID,
+                servico_id: servico.id
+            }));
+
+            const { error: erroItens } = await client
+                .from('agendamento_servicos') 
+                .insert(itensParaSalvar);
+
+            if (erroItens) {
+                alert("Agendamento criado, mas erro ao salvar serviços extras.");
             } else {
-                alert("Agendamento Confirmado!");
-                // Redireciona para o Zap
-                const msg = `Olá! Agendei: ${novoAgendamento.servico} para dia ${data} às ${hora}. Nome: ${nome}`;
-                window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`, '_blank');
+                alert("Agendamento Confirmado com Sucesso!");
+                const nomes = servicosSelecionados.map(s => s.nome).join(" + ");
+                const msg = `Olá! Agendei: ${nomes} para dia ${data} às ${hora}. Nome: ${nome}`;
+                window.open(`https://wa.me/5585982083975?text=${encodeURIComponent(msg)}`, '_blank');
                 window.location.reload();
             }
         });

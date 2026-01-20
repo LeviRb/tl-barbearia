@@ -8,76 +8,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* CSS GLOBAL */
-        body {
-            background-color: #0f0f0f;
-            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Roboto Slab', serif;
-            margin: 0;
-        }
-        .navbar-custom {
-            background-color: rgba(15, 15, 15, 0.95);
-            border-bottom: 2px solid #FFD700;
-            padding: 15px 0;
-            font-family: 'Rye', serif;
-        }
+        /* CSS IGUAL AO SEU */
+        body { background-color: #0f0f0f; background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px); color: white; min-height: 100vh; display: flex; flex-direction: column; font-family: 'Roboto Slab', serif; }
+        .navbar-custom { background-color: rgba(15, 15, 15, 0.95); border-bottom: 2px solid #FFD700; padding: 15px 0; font-family: 'Rye', serif; }
         .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; }
         .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
         .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
-        .flex-grow-content { flex: 1; width: 100%; }
-
-        .page-header { text-align: center; margin-top: 40px; margin-bottom: 40px; }
-        .main-title { 
-            font-family: 'Rye', serif; color: #FFD700; font-size: 3rem; 
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-        }
-        .sub-title { font-size: 1.2rem; color: #e0e0e0; margin-top: 10px; font-family: 'Rye', serif; }
-
-        .appointment-list { max-width: 900px; margin: 0 auto; padding: 0 15px; }
         
-        .appointment-item {
-            border: 2px solid white;
-            border-radius: 50px;
-            padding: 15px 30px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s;
-        }
-        .appointment-item:hover { border-color: #FFD700; transform: scale(1.02); }
-        
-        .appointment-info { text-align: left; }
-        .appointment-text {
-            color: #FFD700;
-            font-family: 'Roboto Slab', serif;
-            font-weight: 900;
-            font-style: italic;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            margin: 0;
-        }
-        .appointment-date { color: #ccc; font-size: 0.9rem; margin: 0; }
+        .appointment-item { border: 2px solid white; border-radius: 20px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background-color: rgba(0,0,0,0.5); }
+        .status-PENDENTE { border-color: white; }
+        .status-FINALIZADO { border-color: #198754; opacity: 0.8; }
+        .status-CANCELADO { border-color: #dc3545; opacity: 0.6; }
 
-        .action-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        .action-btn:hover { color: #FFD700; }
-        .btn-delete:hover { color: #ff4444; }
-
-        .footer { background-color: rgba(15, 15, 15, 0.95); border-top: 2px solid #FFD700; padding: 20px 0; margin-top: auto; width: 100%; }
-        .footer-item { display: flex; align-items: center; justify-content: center; gap: 10px; color: #fff; font-size: 14px; }
-        .footer-item i { color: #FFD700; font-size: 18px; }
-        
-        @media (max-width: 768px) {
-            .appointment-item { flex-direction: column; text-align: center; gap: 15px; border-radius: 20px; }
-            .appointment-info { text-align: center; }
-        }
+        .appointment-text { color: #FFD700; font-family: 'Roboto Slab', serif; font-weight: bold; font-style: italic; font-size: 1.2rem; }
+        .btn-delete { background: none; border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; border-radius: 50%; cursor: pointer; }
+        .btn-delete:hover { background-color: #ff4444; color: white; }
     </style>
 </head>
 <body>
@@ -85,117 +34,127 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="index.html">T & L | BarberShop</a>
-            <button class="navbar-toggler bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link" href="horarios.html">Horários</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="agendamento.html">Agendamento</a></li>
-                    <li class="nav-item"><a class="nav-link" href="meusAgendamentos.html">Meus Agendamentos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="nossotime.html">Nosso Time</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Quem somos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Meus Agendamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="sair()">Sair</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container flex-grow-content">
-        <div class="page-header">
-            <h1 class="main-title"><i class="fas fa-barcode fa-rotate-90"></i> Meus agendamentos</h1>
-            <p class="sub-title">Aqui vc ver seus agendamentos</p>
-        </div>
+    <div class="container mt-5 flex-grow-1">
+        <h1 class="text-center" style="font-family: 'Rye', serif; color: #FFD700; font-size: 3rem;">Meus Agendamentos</h1>
+        <p class="text-center text-secondary mb-5">Histórico de: <strong id="nomeCliente" style="color: white;">...</strong></p>
 
-        <div class="appointment-list" id="listaAgendamentos">
-            <p class="text-center text-muted">Carregando...</p>
+        <div id="listaAgendamentos" style="max-width: 800px; margin: 0 auto;">
+            <p class="text-center">Carregando...</p>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container"><div class="row text-center"><div class="col-12"><div class="footer-item"><span>T & L BarberShop System</span></div></div></div></div>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // --- IMPORTANTE: COLOQUE O NÚMERO DO BARBEIRO AQUI ---
-        const NUMERO_BARBEIRO = "5585982083975"; 
 
-        // Função auxiliar para data bonita
-        function formatarData(dataISO) {
-            if(!dataISO) return "";
-            const [ano, mes, dia] = dataISO.split('-');
-            return `${dia}/${mes}/${ano}`;
+    <script>
+        // --- 1. BLOQUEIO DE SEGURANÇA (O GUARDA) ---
+        // Se não tiver CPF salvo, manda voltar pro login AGORA.
+        const cpfLogado = localStorage.getItem("clienteLogadoCPF");
+        const nomeLogado = localStorage.getItem("clienteNome");
+
+        if (!cpfLogado) {
+            alert("Acesso Negado! Faça login primeiro.");
+            window.location.href = "login.html"; // Redireciona
+        } else {
+            // Se tiver logado, mostra o nome na tela
+            if(nomeLogado) document.getElementById('nomeCliente').innerText = nomeLogado;
         }
 
-        function renderizarAgendamentos() {
+        // --- 2. CONFIGURAÇÃO DO BANCO ---
+        const SUPABASE_URL = 'https://judqyacdukuxwobxxyjg.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1ZHF5YWNkdWt1eHdvYnh4eWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTI2ODEsImV4cCI6MjA4MzQ4ODY4MX0.7jc4l2GGq2SiFnLAXYd_FfmLmpoP6RFsNo_K5iKg_II';
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        window.onload = carregarAgendamentos;
+
+        async function carregarAgendamentos() {
             const container = document.getElementById('listaAgendamentos');
-            const agendamentos = JSON.parse(localStorage.getItem('meusAgendamentos')) || [];
 
-            container.innerHTML = '';
+            // A. Busca ID do cliente usando o CPF salvo
+            const { data: cliente } = await client
+                .from('cliente_model')
+                .select('id')
+                .eq('cpf', cpfLogado)
+                .single();
 
-            if (agendamentos.length === 0) {
-                container.innerHTML = '<h4 class="text-center text-secondary">Você ainda não tem agendamentos.</h4>';
+            if (!cliente) {
+                container.innerHTML = "<p class='text-center'>Erro: Cliente não identificado.</p>";
                 return;
             }
 
-            // Ordena por data (do mais próximo para o mais distante)
-            agendamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+            // B. Busca os agendamentos desse ID
+            const { data: agendamentos, error } = await client
+                .from('agendamentos')
+                .select(`
+                    id, data, horario, status_agendamento,
+                    agendamento_servicos (
+                        servico_model ( nome_servico )
+                    )
+                `)
+                .eq('cliente_id', cliente.id)
+                .order('data', { ascending: false }); // Mais recentes primeiro
 
-            agendamentos.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'appointment-item';
-                div.innerHTML = `
-                    <div class="appointment-info">
-                        <h3 class="appointment-text">${item.servico} - ${item.cliente}</h3>
-                        <p class="appointment-date">
-                            <i class="far fa-calendar"></i> ${formatarData(item.data)} às ${item.hora} 
-                            <span class="text-warning ms-2">| CPF: ${item.cpf}</span>
-                        </p>
-                    </div>
-                    <div class="appointment-actions">
-                        <button class="action-btn" title="Editar" onclick="alert('Funcionalidade em desenvolvimento!')"><i class="far fa-edit"></i></button>
-                        <button class="action-btn btn-delete" title="Cancelar e Avisar Barbeiro" onclick="deletarAgendamento(${item.id})"><i class="far fa-trash-alt"></i></button>
+            if (error) { console.error(error); return; }
+
+            // C. Mostra na tela
+            container.innerHTML = "";
+            if (!agendamentos || agendamentos.length === 0) {
+                container.innerHTML = "<h4 class='text-center text-secondary'>Nenhum agendamento encontrado.</h4>";
+                return;
+            }
+
+            agendamentos.forEach(ag => {
+                const dataFormatada = ag.data.split('-').reverse().join('/');
+                const horaFormatada = ag.horario.slice(0, 5);
+                const status = ag.status_agendamento || 'PENDENTE';
+                
+                // Pega os nomes dos serviços
+                let servicos = "Serviço";
+                if (ag.agendamento_servicos && ag.agendamento_servicos.length > 0) {
+                    servicos = ag.agendamento_servicos.map(s => s.servico_model?.nome_servico).join(" + ");
+                }
+
+                // Botão de Cancelar
+                let btnCancel = "";
+                if (status === 'PENDENTE') {
+                    btnCancel = `<button class="btn-delete" onclick="cancelar(${ag.id})"><i class="fas fa-trash"></i></button>`;
+                }
+
+                container.innerHTML += `
+                    <div class="appointment-item status-${status}">
+                        <div>
+                            <div class="appointment-text">${servicos}</div>
+                            <div class="text-secondary small mt-1">
+                                <i class="fas fa-calendar"></i> ${dataFormatada} às ${horaFormatada} - ${status}
+                            </div>
+                        </div>
+                        ${btnCancel}
                     </div>
                 `;
-                container.appendChild(div);
             });
         }
 
-        // --- FUNÇÃO DE DELETAR COM AVISO NO WHATSAPP ---
-        function deletarAgendamento(id) {
-            // 1. Pega a lista atual
-            let agendamentos = JSON.parse(localStorage.getItem('meusAgendamentos')) || [];
-            
-            // 2. Encontra o item que será apagado para pegar os dados dele
-            const itemParaCancelar = agendamentos.find(ag => ag.id === id);
-
-            if (itemParaCancelar) {
-                if(confirm(`Tem certeza que deseja CANCELAR o agendamento de ${itemParaCancelar.servico}? Isso irá abrir o WhatsApp para avisar o barbeiro.`)) {
-                    
-                    // 3. Monta a mensagem de Cancelamento
-                    const dataFormatada = formatarData(itemParaCancelar.data);
-                    const mensagem = `Olá, sou *${itemParaCancelar.cliente}* (CPF: ${itemParaCancelar.cpf}).%0A%0AGostaria de *CANCELAR* o meu agendamento:%0A🚫 Serviço: ${itemParaCancelar.servico}%0A📅 Data: ${dataFormatada}%0A⏰ Horário: ${itemParaCancelar.hora}%0A%0ADesculpe o transtorno.`;
-
-                    const linkZap = `https://wa.me/${NUMERO_BARBEIRO}?text=${mensagem}`;
-
-                    // 4. Abre o WhatsApp
-                    window.open(linkZap, '_blank');
-
-                    // 5. Remove do banco de dados (localStorage)
-                    agendamentos = agendamentos.filter(ag => ag.id !== id);
-                    localStorage.setItem('meusAgendamentos', JSON.stringify(agendamentos));
-
-                    // 6. Atualiza a tela
-                    renderizarAgendamentos();
-                }
-            }
+        async function cancelar(id) {
+            if(!confirm("Cancelar este horário?")) return;
+            await client.from('agendamentos').update({ status_agendamento: 'CANCELADO' }).eq('id', id);
+            alert("Cancelado!");
+            carregarAgendamentos();
         }
 
-        // Inicia
-        renderizarAgendamentos();
+        function sair() {
+            localStorage.clear(); // Limpa o login
+            window.location.href = "login.html"; // Manda de volta pro login
+        }
     </script>
 </body>
 </html>

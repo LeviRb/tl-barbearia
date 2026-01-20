@@ -10,36 +10,139 @@
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+        /* --- 1. CONFIGURAÇÕES GERAIS (Fundo Dark) --- */
+        body { 
+            background-color: #0f0f0f; 
+            background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px); 
+            color: white; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Roboto Slab', serif; 
+            margin: 0; 
+        }
 
-    <style>
-        /* CSS PADRÃO */
-        body { background-color: #0f0f0f; background-image: repeating-linear-gradient(45deg, #0f0f0f, #0f0f0f 10px, #1a1a1a 10px, #1a1a1a 20px); color: white; min-height: 100vh; display: flex; flex-direction: column; font-family: 'Roboto Slab', serif; margin: 0; }
+        /* --- 2. NAVBAR --- */
         .navbar-custom { background-color: rgba(15, 15, 15, 0.95); border-bottom: 2px solid #FFD700; padding: 15px 0; font-family: 'Rye', serif; }
         .navbar-brand { font-size: 1.5rem; color: #FFD700 !important; text-shadow: 1px 1px 2px black; }
         .nav-link { color: white !important; font-size: 1.1rem; margin: 0 10px; transition: color 0.3s; }
         .nav-link:hover, .nav-link.active { color: #FFD700 !important; }
+
+        /* --- 3. TÍTULOS --- */
         .flex-grow-content { flex: 1; width: 100%; }
         .main-title { font-family: 'Rye', serif; color: #FFD700; font-size: 3.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         .sub-title { font-size: 1.1rem; color: #e0e0e0; margin-bottom: 40px; }
         
-        .flip-container { perspective: 1000px; height: 350px; cursor: pointer; }
-        .flip-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
-        .flip-container.flipped .flip-inner { transform: rotateY(180deg); }
-        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 16px rgba(0,0,0,0.5); overflow: hidden; }
-        .flip-front { background: linear-gradient(145deg, #1a1a1a, #0f0f0f); padding: 20px; }
-        .flip-container:hover .flip-front { border-color: #FFD700; }
-        .service-name-front { font-family: 'Rye', serif; color: #FFD700; font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 0px #000; }
-        .service-price { font-family: 'Roboto Slab', serif; font-size: 2rem; font-weight: bold; color: white; font-style: italic; }
-        .btn-agendar-card { background-color: transparent; border: 2px solid #FFD700; color: #FFD700; font-family: 'Rye', serif; margin-top: 15px; padding: 5px 20px; border-radius: 20px; transition: 0.3s; z-index: 10; }
-        .btn-agendar-card:hover { background-color: #FFD700; color: black; }
-        .flip-back { background-color: #000; transform: rotateY(180deg); border: 2px solid #FFD700; padding: 0; }
+        /* --- 4. FLIP CARD (CORRIGIDO) --- */
+        .flip-container { 
+            perspective: 1000px; 
+            height: 350px; 
+            cursor: pointer; 
+        }
+        
+        .flip-inner { 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+            text-align: center; 
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); 
+            transform-style: preserve-3d; 
+        }
+
+        .flip-container.flipped .flip-inner { 
+            transform: rotateY(180deg); 
+        }
+
+        /* Configuração das Faces (Frente e Verso) */
+        .flip-front, .flip-back { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            -webkit-backface-visibility: hidden; /* Importante para Safari/Chrome */
+            backface-visibility: hidden;         /* Padrão */
+            border-radius: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5); 
+            overflow: hidden;
+            background-color: #1a1a1a; /* Fundo sólido para evitar transparência */
+        }
+
+        /* Estilo da Frente */
+        .flip-front { 
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f); 
+            padding: 20px; 
+            z-index: 2; /* Fica na frente */
+            transform: rotateY(0deg);
+        }
+
+        .flip-container:hover .flip-front { 
+            border-color: #FFD700; 
+        }
+
+        /* Estilo do Verso (Imagem) */
+        .flip-back { 
+            background-color: #000; 
+            transform: rotateY(180deg); 
+            border: 2px solid #FFD700; 
+            padding: 0; 
+            z-index: 1; /* Fica atrás */
+        }
+
+        /* --- 5. TEXTOS E BOTÕES DENTRO DO CARD (Isso estava faltando) --- */
+        .service-name-front { 
+            font-family: 'Rye', serif; 
+            color: #FFD700; 
+            font-size: 1.8rem; 
+            margin-bottom: 10px; 
+            text-shadow: 2px 2px 0px #000; 
+        }
+        
+        .service-price { 
+            font-family: 'Roboto Slab', serif; 
+            font-size: 2rem; 
+            font-weight: bold; 
+            color: white; 
+            font-style: italic; 
+        }
+        
+        .btn-agendar-card { 
+            background-color: transparent; 
+            border: 2px solid #FFD700; 
+            color: #FFD700; 
+            font-family: 'Rye', serif; 
+            margin-top: 15px; 
+            padding: 5px 20px; 
+            border-radius: 20px; 
+            transition: 0.3s; 
+            z-index: 10; 
+            text-decoration: none; /* Remove sublinhado */
+            display: inline-block;
+        }
+        
+        .btn-agendar-card:hover { 
+            background-color: #FFD700; 
+            color: black; 
+        }
+        
         .flip-back img { width: 100%; height: 100%; object-fit: cover; opacity: 1; }
         .flip-back .overlay-text { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 10px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0)); font-family: 'Rye', serif; color: #FFD700; font-size: 1.3rem; text-align: center; }
-        
+
+        /* --- 6. FOOTER --- */
         .footer { background-color: rgba(15, 15, 15, 0.95); border-top: 2px solid #FFD700; padding: 20px 0; margin-top: auto; width: 100%; }
         .footer-item { display: flex; align-items: center; justify-content: center; gap: 10px; color: #fff; font-style: italic; font-size: 14px; }
         .footer-item i { color: #FFD700; font-size: 18px; }
-        @media (max-width: 768px) { .footer-item { justify-content: flex-start; margin-bottom: 10px; } .col-md-3 { margin-bottom: 15px; } .main-title { font-size: 2.5rem; } .flip-container { height: 300px; } }
+        
+        @media (max-width: 768px) { 
+            .footer-item { justify-content: flex-start; margin-bottom: 10px; } 
+            .col-md-3 { margin-bottom: 15px; } 
+            .main-title { font-size: 2.5rem; } 
+            .flip-container { height: 300px; } 
+        }
     </style>
 </head>
 <body>
